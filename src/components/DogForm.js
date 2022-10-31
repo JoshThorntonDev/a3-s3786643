@@ -4,7 +4,8 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { CardImage } from "react-bootstrap-icons";
 import RadioGroup from "./RadioGroup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import AnimatedAlert from "./AnimatedAlert";
 
 function DogForm(props) {
   const [name, setName] = useState("");
@@ -16,6 +17,7 @@ function DogForm(props) {
   const [weight, setWeight] = useState("");
 
   const [error, setError] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
 
   // these are used to generate three RadioGroup components with the correct button values
   const gendersArr = [
@@ -51,7 +53,6 @@ function DogForm(props) {
       return;
     }
 
-
     const [month, day, year] = birthday.split("/"); // get each part of the date to convert to standard
 
     const date = new Date(`${year}-${month}-${day}`); // create iso formatted date
@@ -60,7 +61,7 @@ function DogForm(props) {
 
     if (typeof timestamp !== "number" || Number.isNaN(timestamp)) {
       // if the timestamp is invalid then the date is also invalid
-      setError("Date is not in MM/DD/YYYY format");
+      setError("Birthday is not in MM/DD/YYYY format");
       return false;
     }
 
@@ -74,14 +75,19 @@ function DogForm(props) {
       return;
     }
 
-    if (!error) {
-      console.log("no errors");
-      // submit
-    }
+    setShowAlert(false);
+    // submit
   };
+
+  useEffect(() => {
+    if (error) {
+      setShowAlert(true);
+    }
+  }, [error]);
 
   return (
     <Form onSubmit={handleSubmit}>
+      <AnimatedAlert display={showAlert} message={error}></AnimatedAlert>
       <Row>
         <Col>
           <Form.Group className="mb-3" controlId="formGroupName">
