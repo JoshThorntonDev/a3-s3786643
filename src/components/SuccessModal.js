@@ -4,7 +4,9 @@ import { getAgeInYears } from "../data/getAge";
 import PropTypes from "prop-types";
 
 /**
- * Full screen success message that lists pet information
+ * Full screen success message that lists pet information.
+ * 
+ * Uses **Modal**, **Col**, **Image** and **Row** from 'react-bootstrap'
  */
 function SuccessModal(props) {
   return (
