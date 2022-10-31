@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ButtonGroup from "react-bootstrap/ButtonGroup";
+import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
 
 function RadioGroup(props) {
@@ -7,14 +7,14 @@ function RadioGroup(props) {
 
   return (
     <div className="d-grid">
-      <ButtonGroup>
+      <ToggleButtonGroup name={props.name}>
         {props.radios.map((radio, idx) => (
           <ToggleButton
             key={idx}
-            id={`radio-${idx}`}
+            id={`${props.name}-${idx}`}
             type="radio"
             variant="outline-secondary"
-            name="radio"
+            name={radio.value}
             value={radio.value}
             checked={radioValue === radio.value}
             onChange={(e) => setRadioValue(e.currentTarget.value)}
@@ -22,7 +22,7 @@ function RadioGroup(props) {
             {radio.name}
           </ToggleButton>
         ))}
-      </ButtonGroup>
+      </ToggleButtonGroup>
     </div>
   );
 }
