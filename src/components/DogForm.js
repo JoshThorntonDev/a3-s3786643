@@ -179,6 +179,7 @@ function DogForm(props) {
               radios={gendersArr}
               value={values.gender}
               inputChange={handleInputChange}
+              default={gendersArr[0].value}
             ></RadioGroup>
           </Form.Group>
         </Col>
@@ -190,6 +191,7 @@ function DogForm(props) {
               radios={statusArr}
               value={values.status}
               inputChange={handleInputChange}
+              default={statusArr[0].value}
             ></RadioGroup>
           </Form.Group>
         </Col>
@@ -203,12 +205,13 @@ function DogForm(props) {
               radios={weightArr}
               value={values.weight}
               inputChange={handleInputChange}
+              default={weightArr[0].value}
             ></RadioGroup>
           </Form.Group>
         </Col>
       </Row>
       <div className="text-end">
-        <Button type="submit" variant="success">
+        <Button role={'submit'} type="submit" variant="success">
           Submit
         </Button>
       </div>

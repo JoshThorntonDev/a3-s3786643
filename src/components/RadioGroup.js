@@ -4,7 +4,7 @@ import ToggleButton from "react-bootstrap/ToggleButton";
 function RadioGroup(props) {
   return (
     <div className="d-grid">
-      <ToggleButtonGroup name={props.name}>
+      <ToggleButtonGroup defaultValue={props.default} name={props.name}>
         {props.radios.map((radio, idx) => ( // for each entry in props.radios, create a button
           <ToggleButton
             key={idx}
@@ -13,7 +13,6 @@ function RadioGroup(props) {
             variant="outline-secondary"
             name={radio.value}
             value={radio.value}
-            checked={props.value === radio.value}
             onChange={props.inputChange}
           >
             {radio.name}
