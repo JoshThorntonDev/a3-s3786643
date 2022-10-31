@@ -15,6 +15,8 @@ function DogForm(props) {
   const [status, setStatus] = useState("");
   const [weight, setWeight] = useState("");
 
+  const [error, setError] = useState(false);
+
   // these are used to generate three RadioGroup components with the correct button values
   const gendersArr = [
     { name: "Female", value: "female" },
@@ -32,8 +34,54 @@ function DogForm(props) {
     { name: "100+ lbs", value: "100+lbs" },
   ];
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setError(false); // clear error in case user has set it already
+
+    if (name === "") {
+      setError("Name is required");
+      return;
+    }
+    if (breed === "") {
+      setError("Breed is required");
+      return;
+    }
+    if (birthday === "") {
+      setError("Birthday is required");
+      return;
+    }
+
+
+    const [month, day, year] = birthday.split("/"); // get each part of the date to convert to standard
+
+    const date = new Date(`${year}-${month}-${day}`); // create iso formatted date
+
+    const timestamp = date.getTime(); // see if the date has a timestamp
+
+    if (typeof timestamp !== "number" || Number.isNaN(timestamp)) {
+      // if the timestamp is invalid then the date is also invalid
+      setError("Date is not in MM/DD/YYYY format");
+      return false;
+    }
+
+    if (breed.toUpperCase() !== breed) {
+      setError("Breed must be capitalised");
+      return;
+    }
+
+    if (name.length > 20) {
+      setError("Name cannot exceed 20 characters");
+      return;
+    }
+
+    if (!error) {
+      console.log("no errors");
+      // submit
+    }
+  };
+
   return (
-    <Form>
+    <Form onSubmit={handleSubmit}>
       <Row>
         <Col>
           <Form.Group className="mb-3" controlId="formGroupName">
@@ -44,7 +92,9 @@ function DogForm(props) {
               name="name"
               placeholder="Pet's name"
               onChange={(event) => {
-                setName(event.target.value);
+                if (event.target.value.length <= 20)
+                  // prevent names greater than 20 characters
+                  setName(event.target.value);
               }}
             />
           </Form.Group>
