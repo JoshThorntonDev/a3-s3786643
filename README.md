@@ -1,5 +1,8 @@
 # FWP Assignment 3 - s3786643
 
+## Documentation
+To generate documentation, after running npm install from the root, run:
+### `npx styleguidist server`, then navigate to localhost:6060
 
 # Getting Started with Create React App
 
