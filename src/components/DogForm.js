@@ -4,15 +4,22 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { CardImage } from "react-bootstrap-icons";
 import RadioGroup from "./RadioGroup";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import AnimatedAlert from "./AnimatedAlert";
 import SuccessModal from "./SuccessModal";
+import { insertPet } from "../data/storage";
+import { getAgeInYears } from "../data/getAge";
+import { validate } from "../data/validate";
 
 function DogForm(props) {
   const [error, setError] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
 
   const [showSuccess, setShowSuccess] = useState(false);
+  const toggleSuccess = () => {
+    setShowSuccess((current) => !current);
+  };
+
   const [values, setValues] = useState({
     name: "",
     image: "",
@@ -22,6 +29,35 @@ function DogForm(props) {
     status: "",
     weight: "",
   });
+
+  const calcInsurance = () => {
+    var total = 0;
+    var age = getAgeInYears(values.birthday);
+
+    if (age > 10) {
+      return "No insurance offered";
+    }
+
+    if (values.weight === "100+lbs") {
+      total += 50;
+    }
+
+    if (age <= 5) {
+      total += 100;
+    }
+
+    if (age >= 6 && age <= 10) {
+      total += 160;
+    }
+
+    return total;
+  };
+
+  const insurance = useMemo(
+    // only recalculate insurance when weight or birthday changes
+    () => calcInsurance(),
+    [values.weight, values.birthday]
+  );
 
   const handleInputChange = (event) => {
     setValues({
@@ -51,44 +87,17 @@ function DogForm(props) {
     e.preventDefault();
     setError(false); // clear error in case user has set it already
 
-    if (values.name === "") {
-      setError("Name is required");
-      return;
+    var result = validate(values);
+    if (result !== "VALID") {
+      setError(result);
+    } else {
+      // success
+      setShowAlert(false);
+      setShowSuccess(true);
+
+      // save to storage
+      insertPet(values, insurance);
     }
-    if (values.breed === "") {
-      setError("Breed is required");
-      return;
-    }
-    if (values.birthday === "") {
-      setError("Birthday is required");
-      return;
-    }
-
-    const [month, day, year] = values.birthday.split("/"); // get each part of the date to convert to standard
-
-    const date = new Date(`${year}-${month}-${day}`); // create iso formatted date
-
-    const timestamp = date.getTime(); // see if the date has a timestamp
-
-    if (typeof timestamp !== "number" || Number.isNaN(timestamp)) {
-      // if the timestamp is invalid then the date is also invalid
-      setError("Birthday is not in MM/DD/YYYY format");
-      return false;
-    }
-
-    if (values.breed.toUpperCase() !== values.breed) {
-      setError("Breed must be capitalised");
-      return;
-    }
-
-    if (values.name.length > 20) {
-      setError("Name cannot exceed 20 characters");
-      return;
-    }
-
-    setShowAlert(false);
-    setShowSuccess(true);
-
   };
 
   useEffect(() => {
@@ -102,8 +111,9 @@ function DogForm(props) {
       <AnimatedAlert display={showAlert} message={error}></AnimatedAlert>
       <SuccessModal
         show={showSuccess}
-        setShowSuccess={setShowSuccess}
+        toggle={toggleSuccess}
         values={values}
+        insurance={insurance}
       />
       <Row>
         <Col>
