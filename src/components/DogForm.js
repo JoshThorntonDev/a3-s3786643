@@ -6,6 +6,8 @@ import { CardImage } from "react-bootstrap-icons";
 import RadioGroup from "./RadioGroup";
 
 function DogForm(props) {
+    
+  // these are used to generate three RadioGroup components with the correct button values
   const genders = [
     { name: "Female", value: "female" },
     { name: "Male", value: "male" },
