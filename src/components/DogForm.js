@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { CardImage } from "react-bootstrap-icons";
 import RadioGroup from "./RadioGroup";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import AnimatedAlert from "./AnimatedAlert";
 import SuccessModal from "./SuccessModal";
 
@@ -26,8 +26,50 @@ function DogForm(props) {
     gender: "",
     status: "",
     weight: "",
-    insurance: 0,
+    age: "",
   });
+
+  const getAgeInYears = () => {
+    var milliseconds = new Date() - new Date(values.utcBirthday);
+
+    var age = Math.floor(milliseconds / 1000 / 60 / 60 / 24 / 365);
+
+    setValues({ // set age in values since we need to save it later
+      ...values,
+      age: age,
+    });
+
+    return age;
+  };
+
+  const calcInsurance = () => {
+    var total = 0;
+    var age = getAgeInYears();
+
+    if (age > 10) {
+      return "No insurance offered";
+    }
+
+    if (values.weight === "100+lbs") {
+      total += 50;
+    }
+
+    if (age <= 5) {
+      total += 100;
+    }
+
+    if (age >= 6 && age <= 10) {
+      total += 160;
+    }
+
+    return total;
+  };
+
+  const insurance = useMemo(
+    // only recalculate insurance when weight or birthday changes
+    () => calcInsurance(),
+    [values.weight, values.utcBirthday]
+  );
 
   const handleInputChange = (event) => {
     setValues({
@@ -110,7 +152,12 @@ function DogForm(props) {
   return (
     <Form onSubmit={handleSubmit}>
       <AnimatedAlert display={showAlert} message={error}></AnimatedAlert>
-      <SuccessModal show={showSuccess} toggle={toggleSuccess} values={values} />
+      <SuccessModal
+        show={showSuccess}
+        toggle={toggleSuccess}
+        values={values}
+        insurance={insurance}
+      />
       <Row>
         <Col>
           <Form.Group className="mb-3" controlId="formGroupName">

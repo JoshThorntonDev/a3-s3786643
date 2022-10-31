@@ -3,12 +3,6 @@ import Modal from "react-bootstrap/Modal";
 
 function SuccessModal(props) {
 
-const getAgeInYears = () => {
-    var milliseconds = new Date() - new Date(props.values.utcBirthday)
-
-    return Math.floor(milliseconds/1000/60/60/24/365);
-}
-
   return (
     <Modal size="lg" show={props.show} onHide={props.toggle}>
       <Modal.Header closeButton>
@@ -17,9 +11,9 @@ const getAgeInYears = () => {
       <Modal.Body>
         <Row>
           <Col>
-            <p>Age: {getAgeInYears()}</p>
+            <p>Age: {props.values.age}</p>
             <p>Breed: {props.values.breed}</p>
-            <p>Insurance: {props.values.insurance}</p>
+            <p>Insurance: {props.insurance}</p>
           </Col>
           <Col>
             <Image fluid src={props.values.image}></Image>
