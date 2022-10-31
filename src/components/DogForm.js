@@ -9,6 +9,7 @@ import AnimatedAlert from "./AnimatedAlert";
 import SuccessModal from "./SuccessModal";
 import { insertPet } from "../data/storage";
 import { getAgeInYears } from "../data/getAge";
+import { validate } from "../data/validate";
 
 function DogForm(props) {
   const [error, setError] = useState(false);
@@ -28,7 +29,6 @@ function DogForm(props) {
     status: "",
     weight: "",
   });
-
 
   const calcInsurance = () => {
     var total = 0;
@@ -87,44 +87,17 @@ function DogForm(props) {
     e.preventDefault();
     setError(false); // clear error in case user has set it already
 
-    if (values.name === "") {
-      setError("Name is required");
-      return;
+    var result = validate(values);
+    if (result !== "VALID") {
+      setError(result);
+    } else {
+      // success
+      setShowAlert(false);
+      setShowSuccess(true);
+
+      // save to storage
+      insertPet(values, insurance);
     }
-    if (values.breed === "") {
-      setError("Breed is required");
-      return;
-    }
-    if (values.birthday === "") {
-      setError("Birthday is required");
-      return;
-    }
-
-
-    if (Number.isNaN(getAgeInYears(values.birthday))) {
-      // if an age cant be found, date is invalid
-      setError("Birthday is not in MM/DD/YYYY format");
-      return false;
-    }
-
-
-    if (values.breed.toUpperCase() !== values.breed) {
-      setError("Breed must be capitalised");
-      return;
-    }
-
-    if (values.name.length > 20) {
-      setError("Name cannot exceed 20 characters");
-      return;
-    }
-
-
-    // success
-    setShowAlert(false);
-    setShowSuccess(true);
-
-    // save to storage
-    insertPet(values, insurance)
   };
 
   useEffect(() => {
