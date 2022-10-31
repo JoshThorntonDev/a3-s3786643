@@ -211,7 +211,7 @@ function DogForm(props) {
         </Col>
       </Row>
       <div className="text-end">
-        <Button type="submit" variant="success">
+        <Button role={'submit'} type="submit" variant="success">
           Submit
         </Button>
       </div>
