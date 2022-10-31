@@ -14,7 +14,7 @@ function RadioGroup(props) {
             name={radio.value}
             value={radio.value}
             checked={props.value === radio.value}
-            onChange={(e) => props.setValue(e.currentTarget.value)}
+            onChange={props.inputChange}
           >
             {radio.name}
           </ToggleButton>
