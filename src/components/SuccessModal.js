@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 
 /**
  * Full screen success message that lists pet information.
- * 
+ *
  * Uses **Modal**, **Col**, **Image** and **Row** from 'react-bootstrap'
  */
 function SuccessModal(props) {
@@ -51,10 +51,10 @@ SuccessModal.propTypes = {
     image: PropTypes.string,
   }),
 
-    /**
-   * Number equal to annual cost of insurance in dollars
+  /**
+   * Number equal to annual cost of insurance in dollars, or a message such as 'No insurance offered'
    */
-  insurance: PropTypes.number,
+  insurance: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 export default SuccessModal;
