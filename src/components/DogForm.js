@@ -11,6 +11,9 @@ import { insertPet } from "../data/storage";
 import { getAgeInYears } from "../data/getAge";
 import { validate } from "../data/validate";
 
+/**
+ * Form to get user pet information and store in local storage
+ */
 function DogForm(props) {
   const [error, setError] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -217,5 +220,6 @@ function DogForm(props) {
     </Form>
   );
 }
+
 
 export default DogForm;
