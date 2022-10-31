@@ -1,5 +1,6 @@
 import { Col, Image, Row } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
+import { getAgeInYears } from "../data/getAge";
 
 function SuccessModal(props) {
 
@@ -11,7 +12,7 @@ function SuccessModal(props) {
       <Modal.Body>
         <Row>
           <Col>
-            <p>Age: {props.values.age}</p>
+            <p>Age: {getAgeInYears(props.values.birthday)}</p>
             <p>Breed: {props.values.breed}</p>
             <p>Insurance: {props.insurance}</p>
           </Col>

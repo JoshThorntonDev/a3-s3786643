@@ -7,6 +7,8 @@ import RadioGroup from "./RadioGroup";
 import { useEffect, useMemo, useState } from "react";
 import AnimatedAlert from "./AnimatedAlert";
 import SuccessModal from "./SuccessModal";
+import { insertPet } from "../data/storage";
+import { getAgeInYears } from "../data/getAge";
 
 function DogForm(props) {
   const [error, setError] = useState(false);
@@ -22,29 +24,15 @@ function DogForm(props) {
     image: "",
     breed: "",
     birthday: "",
-    utcBirthday: "",
     gender: "",
     status: "",
     weight: "",
-    age: "",
   });
 
-  const getAgeInYears = () => {
-    var milliseconds = new Date() - new Date(values.utcBirthday);
-
-    var age = Math.floor(milliseconds / 1000 / 60 / 60 / 24 / 365);
-
-    setValues({ // set age in values since we need to save it later
-      ...values,
-      age: age,
-    });
-
-    return age;
-  };
 
   const calcInsurance = () => {
     var total = 0;
-    var age = getAgeInYears();
+    var age = getAgeInYears(values.birthday);
 
     if (age > 10) {
       return "No insurance offered";
@@ -68,7 +56,7 @@ function DogForm(props) {
   const insurance = useMemo(
     // only recalculate insurance when weight or birthday changes
     () => calcInsurance(),
-    [values.weight, values.utcBirthday]
+    [values.weight, values.birthday]
   );
 
   const handleInputChange = (event) => {
@@ -124,10 +112,6 @@ function DogForm(props) {
       return false;
     }
 
-    setValues({
-      ...values,
-      utcBirthday: date.toUTCString(),
-    });
 
     if (values.breed.toUpperCase() !== values.breed) {
       setError("Breed must be capitalised");
@@ -139,8 +123,13 @@ function DogForm(props) {
       return;
     }
 
+
+    // success
     setShowAlert(false);
     setShowSuccess(true);
+
+    // save to storage
+    insertPet(values, insurance)
   };
 
   useEffect(() => {

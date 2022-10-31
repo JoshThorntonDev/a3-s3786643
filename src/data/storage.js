@@ -1,3 +1,5 @@
+import { getAgeInYears } from "./getAge";
+
 const PETS_KEY = "pets";
 
 function initPets() {
@@ -17,7 +19,7 @@ function setPets(pets) {
   localStorage.setItem(PETS_KEY, JSON.stringify(pets));
 }
 
-function insertPet(values) {
+function insertPet(values, insurance) {
   //Retrieve pets, add new pet to the list, and call setPets
 
   const pets = getPets();
@@ -25,8 +27,8 @@ function insertPet(values) {
   var pet = {
     name: values.name,
     breed: values.breed,
-    age: values.age,
-    insurance: values.insurance,
+    insurance: insurance,
+    age: getAgeInYears(values.birthday)
   };
 
   pets[getId()] = pet; // give the pet a unique id
