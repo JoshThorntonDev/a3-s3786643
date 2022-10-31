@@ -85,9 +85,11 @@ function DogForm(props) {
           </Form.Group>
         </Col>
       </Row>
-      <Button type="submit" variant="success">
-        Submit
-      </Button>
+      <div className="text-end">
+        <Button type="submit" variant="success">
+          Submit
+        </Button>
+      </div>
     </Form>
   );
 }
