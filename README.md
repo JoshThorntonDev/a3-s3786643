@@ -1,8 +1,12 @@
 # FWP Assignment 3 - s3786643
 
 ## Documentation
-To generate documentation, after running npm install from the root, run:
+To start documentation server, after running npm install from the root, run:
 ### `npx styleguidist server`, then navigate to localhost:6060
+
+Or, to build HTML documentation files, after running npm install from the root, run:
+### `npx styleguidist build`
+Documentation will be placed in /styleguide
 
 # Getting Started with Create React App
 
