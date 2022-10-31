@@ -4,16 +4,31 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { CardImage } from "react-bootstrap-icons";
 import RadioGroup from "./RadioGroup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import AnimatedAlert from "./AnimatedAlert";
+import SuccessModal from "./SuccessModal";
 
 function DogForm(props) {
-  const [name, setName] = useState("");
-  const [image, setImage] = useState("");
-  const [breed, setBreed] = useState("");
-  const [birthday, setBirthday] = useState("");
-  const [gender, setGender] = useState("");
-  const [status, setStatus] = useState("");
-  const [weight, setWeight] = useState("");
+  const [error, setError] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [values, setValues] = useState({
+    name: "",
+    image: "",
+    breed: "",
+    birthday: "",
+    gender: "",
+    status: "",
+    weight: "",
+  });
+
+  const handleInputChange = (event) => {
+    setValues({
+      ...values,
+      [event.target.name]: event.target.value,
+    });
+  };
 
   // these are used to generate three RadioGroup components with the correct button values
   const gendersArr = [
@@ -32,20 +47,74 @@ function DogForm(props) {
     { name: "100+ lbs", value: "100+lbs" },
   ];
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setError(false); // clear error in case user has set it already
+
+    if (values.name === "") {
+      setError("Name is required");
+      return;
+    }
+    if (values.breed === "") {
+      setError("Breed is required");
+      return;
+    }
+    if (values.birthday === "") {
+      setError("Birthday is required");
+      return;
+    }
+
+    const [month, day, year] = values.birthday.split("/"); // get each part of the date to convert to standard
+
+    const date = new Date(`${year}-${month}-${day}`); // create iso formatted date
+
+    const timestamp = date.getTime(); // see if the date has a timestamp
+
+    if (typeof timestamp !== "number" || Number.isNaN(timestamp)) {
+      // if the timestamp is invalid then the date is also invalid
+      setError("Birthday is not in MM/DD/YYYY format");
+      return false;
+    }
+
+    if (values.breed.toUpperCase() !== values.breed) {
+      setError("Breed must be capitalised");
+      return;
+    }
+
+    if (values.name.length > 20) {
+      setError("Name cannot exceed 20 characters");
+      return;
+    }
+
+    setShowAlert(false);
+    setShowSuccess(true);
+
+  };
+
+  useEffect(() => {
+    if (error) {
+      setShowAlert(true);
+    }
+  }, [error]);
+
   return (
-    <Form>
+    <Form onSubmit={handleSubmit}>
+      <AnimatedAlert display={showAlert} message={error}></AnimatedAlert>
+      <SuccessModal
+        show={showSuccess}
+        setShowSuccess={setShowSuccess}
+        values={values}
+      />
       <Row>
         <Col>
           <Form.Group className="mb-3" controlId="formGroupName">
             <Form.Label>Name</Form.Label>
             <Form.Control
               type="text"
-              value={name}
+              value={values.name}
               name="name"
               placeholder="Pet's name"
-              onChange={(event) => {
-                setName(event.target.value);
-              }}
+              onChange={handleInputChange}
             />
           </Form.Group>
         </Col>
@@ -58,10 +127,8 @@ function DogForm(props) {
               type="text"
               name="image"
               placeholder="URL to image of pet"
-              value={image}
-              onChange={(event) => {
-                setImage(event.target.value);
-              }}
+              value={values.image}
+              onChange={handleInputChange}
             />
           </Form.Group>
         </Col>
@@ -74,10 +141,8 @@ function DogForm(props) {
               type="text"
               name="breed"
               placeholder="Pet's breed"
-              value={breed}
-              onChange={(event) => {
-                setBreed(event.target.value);
-              }}
+              value={values.breed}
+              onChange={handleInputChange}
             />
           </Form.Group>
         </Col>
@@ -88,10 +153,8 @@ function DogForm(props) {
               type="text"
               name="birthday"
               placeholder="MM/DD/YYYY"
-              value={birthday}
-              onChange={(event) => {
-                setBirthday(event.target.value);
-              }}
+              value={values.birthday}
+              onChange={handleInputChange}
             />
           </Form.Group>
         </Col>
@@ -104,8 +167,8 @@ function DogForm(props) {
             <RadioGroup
               name="gender"
               radios={gendersArr}
-              value={gender}
-              setValue={setGender}
+              value={values.gender}
+              inputChange={handleInputChange}
             ></RadioGroup>
           </Form.Group>
         </Col>
@@ -115,8 +178,8 @@ function DogForm(props) {
             <RadioGroup
               name="status"
               radios={statusArr}
-              value={status}
-              setValue={setStatus}
+              value={values.status}
+              inputChange={handleInputChange}
             ></RadioGroup>
           </Form.Group>
         </Col>
@@ -128,8 +191,8 @@ function DogForm(props) {
             <RadioGroup
               name="weight"
               radios={weightArr}
-              value={weight}
-              setValue={setWeight}
+              value={values.weight}
+              inputChange={handleInputChange}
             ></RadioGroup>
           </Form.Group>
         </Col>
