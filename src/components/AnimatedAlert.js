@@ -19,12 +19,12 @@ AnimatedAlert.propTypes = {
   /**
    * Controls if the alert is visible or not
    */
-  display: PropTypes.bool,
+  display: PropTypes.bool.isRequired,
 
   /**
    * Message to be displayed inside the alert, or can be untruthy to not show
    */
-  message: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  message: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]).isRequired,
 };
 
 export default AnimatedAlert;

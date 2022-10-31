@@ -34,12 +34,12 @@ SuccessModal.propTypes = {
   /**
    * Controls whether the modal is currently shown or not
    */
-  show: PropTypes.bool,
+  show: PropTypes.bool.isRequired,
 
   /**
    * Function that toggles the state of **show** prop
    */
-  toggle: PropTypes.func,
+  toggle: PropTypes.func.isRequired,
 
   /**
    * Object that stores values to be displayed
@@ -49,12 +49,12 @@ SuccessModal.propTypes = {
     birthday: PropTypes.string,
     breed: PropTypes.string,
     image: PropTypes.string,
-  }),
+  }).isRequired,
 
   /**
    * Number equal to annual cost of insurance in dollars, or a message such as 'No insurance offered'
    */
-  insurance: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  insurance: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 };
 
 export default SuccessModal;

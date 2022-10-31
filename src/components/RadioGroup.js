@@ -41,19 +41,19 @@ RadioGroup.propTypes = {
   /**
    * Name of RadioGroup, must be unique
    */
-  name: PropTypes.string,
+  name: PropTypes.string.isRequired,
 
   /**
    * A function, recommended use is to update state elsewhere
    */
-  inputChange: PropTypes.func,
+  inputChange: PropTypes.func.isRequired,
 
   /**
    * A list of objects each with **name** and **value**, both as strings
    */
   radios: PropTypes.arrayOf(
     PropTypes.object
-  ),
+  ).isRequired,
 };
 
 export default RadioGroup;
