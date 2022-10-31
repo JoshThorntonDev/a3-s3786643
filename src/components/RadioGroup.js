@@ -1,10 +1,7 @@
-import React, { useState } from "react";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
 
 function RadioGroup(props) {
-  const [radioValue, setRadioValue] = useState("");
-
   return (
     <div className="d-grid">
       <ToggleButtonGroup name={props.name}>
@@ -16,8 +13,8 @@ function RadioGroup(props) {
             variant="outline-secondary"
             name={radio.value}
             value={radio.value}
-            checked={radioValue === radio.value}
-            onChange={(e) => setRadioValue(e.currentTarget.value)}
+            checked={props.value === radio.value}
+            onChange={(e) => props.setValue(e.currentTarget.value)}
           >
             {radio.name}
           </ToggleButton>
