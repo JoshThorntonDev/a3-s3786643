@@ -100,14 +100,9 @@ function DogForm(props) {
       return;
     }
 
-    const [month, day, year] = values.birthday.split("/"); // get each part of the date to convert to standard
 
-    const date = new Date(`${year}-${month}-${day}`); // create iso formatted date
-
-    const timestamp = date.getTime(); // see if the date has a timestamp
-
-    if (typeof timestamp !== "number" || Number.isNaN(timestamp)) {
-      // if the timestamp is invalid then the date is also invalid
+    if (Number.isNaN(getAgeInYears(values.birthday))) {
+      // if an age cant be found, date is invalid
       setError("Birthday is not in MM/DD/YYYY format");
       return false;
     }
