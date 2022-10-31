@@ -30,32 +30,31 @@ function DogForm(props) {
     weight: "",
   });
 
-  const calcInsurance = () => {
-    var total = 0;
-    var age = getAgeInYears(values.birthday);
-
-    if (age > 10) {
-      return "No insurance offered";
-    }
-
-    if (values.weight === "100+lbs") {
-      total += 50;
-    }
-
-    if (age <= 5) {
-      total += 100;
-    }
-
-    if (age >= 6 && age <= 10) {
-      total += 160;
-    }
-
-    return total;
-  };
-
   const insurance = useMemo(
     // only recalculate insurance when weight or birthday changes
-    () => calcInsurance(),
+    () => {
+      var total = 0;
+      var age = getAgeInYears(values.birthday);
+
+      if (age > 10) {
+        return "No insurance offered";
+      }
+
+      if (values.weight === "100+lbs") {
+        total += 50;
+      }
+
+      if (age <= 5) {
+        total += 100;
+      }
+
+      if (age >= 6 && age <= 10) {
+        total += 160;
+      }
+
+      return total;
+    },
+
     [values.weight, values.birthday]
   );
 
@@ -211,7 +210,7 @@ function DogForm(props) {
         </Col>
       </Row>
       <div className="text-end">
-        <Button role={'submit'} type="submit" variant="success">
+        <Button role={"submit"} type="submit" variant="success">
           Submit
         </Button>
       </div>
