@@ -13,14 +13,20 @@ function DogForm(props) {
   const [showAlert, setShowAlert] = useState(false);
 
   const [showSuccess, setShowSuccess] = useState(false);
+  const toggleSuccess = () => {
+    setShowSuccess((current) => !current);
+  };
+
   const [values, setValues] = useState({
     name: "",
     image: "",
     breed: "",
     birthday: "",
+    utcBirthday: "",
     gender: "",
     status: "",
     weight: "",
+    insurance: 0,
   });
 
   const handleInputChange = (event) => {
@@ -76,6 +82,11 @@ function DogForm(props) {
       return false;
     }
 
+    setValues({
+      ...values,
+      utcBirthday: date.toUTCString(),
+    });
+
     if (values.breed.toUpperCase() !== values.breed) {
       setError("Breed must be capitalised");
       return;
@@ -88,7 +99,6 @@ function DogForm(props) {
 
     setShowAlert(false);
     setShowSuccess(true);
-
   };
 
   useEffect(() => {
@@ -100,11 +110,7 @@ function DogForm(props) {
   return (
     <Form onSubmit={handleSubmit}>
       <AnimatedAlert display={showAlert} message={error}></AnimatedAlert>
-      <SuccessModal
-        show={showSuccess}
-        setShowSuccess={setShowSuccess}
-        values={values}
-      />
+      <SuccessModal show={showSuccess} toggle={toggleSuccess} values={values} />
       <Row>
         <Col>
           <Form.Group className="mb-3" controlId="formGroupName">
